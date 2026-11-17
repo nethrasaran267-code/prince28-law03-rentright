@@ -1,0 +1,27 @@
+
+[
+  {
+    "id": "001",
+    "section": "Section 11",
+    "topic": "Security Deposit",
+    "obligation_of": "Landlord",
+    "limit": "Security deposit must not exceed three times the monthly rent, unless otherwise agreed. Refund within one month after the tenant vacates, after deductions for liabilities.",
+    "penalty": null
+  },
+  {
+    "id": "002",
+    "section": "Section 17",
+    "topic": "Landlord Entry with Notice",
+    "obligation_of": "Landlord and Property Manager",
+    "limit": "At least 24 hours written notice. Entry must be between 7 AM and 8 PM.",
+    "penalty": null
+  },
+  {
+    "id": "003",
+    "section": "Section 16",
+    "topic": "Tenant Maintenance Responsibilities",
+    "obligation_of": "Tenant",
+    "limit": "Must avoid intentional or negligent damage, report damage as soon as possible and take reasonable care of the premises.",
+    "penalty": null
+  }
+]
