@@ -5,7 +5,7 @@
     "section": "Section 11",
     "topic": "Security Deposit",
     "obligation_of": "Landlord",
-    "limit": "Security deposit must not exceed three times the monthly rent, unless otherwise agreed. Refund within one month after the tenant vacates, after deductions for liabilities.",
+    "limit": "Security deposit must not exceed three times the monthly rent, unless otherwise agreed. Refund must be made when the landlord takes possession of the vacant premises, after deducting tenant liabilities.",
     "penalty": null
   },
   {
@@ -13,15 +13,31 @@
     "section": "Section 17",
     "topic": "Landlord Entry with Notice",
     "obligation_of": "Landlord and Property Manager",
-    "limit": "At least 24 hours written notice. Entry must be between 7 AM and 8 PM.",
+    "limit": "At least 24 hours written notice. Notice must specify the reason, day and time. Entry must be between 7 AM and 8 PM.",
     "penalty": null
   },
   {
     "id": "003",
     "section": "Section 16",
-    "topic": "Tenant Maintenance Responsibilities",
+    "topic": "Tenant Responsibilities",
     "obligation_of": "Tenant",
-    "limit": "Must avoid intentional or negligent damage, report damage as soon as possible and take reasonable care of the premises.",
+    "limit": "Must not intentionally or negligently damage the premises, must notify the landlord of damage as soon as possible, and must take reasonable care of the premises.",
+    "penalty": null
+  },
+  {
+    "id": "004",
+    "section": "Section 12",
+    "topic": "Providing Registered Tenancy Agreement",
+    "obligation_of": "Landlord",
+    "limit": "Must provide one original signed and registered tenancy agreement to the tenant within 15 days of its registration with the Rent Authority.",
+    "penalty": null
+  },
+  {
+    "id": "005",
+    "section": "Section 13",
+    "topic": "Rent Payment and Receipt",
+    "obligation_of": "Tenant and Landlord",
+    "limit": "Tenant must pay rent within the period specified in the agreement. Landlord or property manager must provide a written receipt forthwith against acknowledgement. Bank acknowledgement is proof of electronic payment.",
     "penalty": null
   }
 ]
