@@ -1,43 +1,203 @@
 
 [
   {
-    "id": "001",
-    "section": "Section 11",
-    "topic": "Security Deposit",
-    "obligation_of": "Landlord",
-    "limit": "Security deposit must not exceed three times the monthly rent, unless otherwise agreed. Refund must be made when the landlord takes possession of the vacant premises, after deducting tenant liabilities.",
-    "penalty": null
+    "id": "LAW001",
+    "section": "Right to Information",
+    "title": "Right to Information Act, 2005",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2005-06-15",
+    "category": "Fundamental Rights",
+    "act": "RTI Act"
   },
   {
-    "id": "002",
-    "section": "Section 17",
-    "topic": "Landlord Entry with Notice",
-    "obligation_of": "Landlord and Property Manager",
-    "limit": "At least 24 hours written notice. Notice must specify the reason, day and time. Entry must be between 7 AM and 8 PM.",
-    "penalty": null
+    "id": "LAW002",
+    "section": "Consumer Protection",
+    "title": "Consumer Protection Act, 2019",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2019-08-09",
+    "category": "Consumer Law",
+    "act": "Consumer Protection Act"
   },
   {
-    "id": "003",
-    "section": "Section 16",
-    "topic": "Tenant Responsibilities",
-    "obligation_of": "Tenant",
-    "limit": "Must not intentionally or negligently damage the premises, must notify the landlord of damage as soon as possible, and must take reasonable care of the premises.",
-    "penalty": null
+    "id": "LAW003",
+    "section": "Information Technology",
+    "title": "Information Technology Act, 2000",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2000-06-09",
+    "category": "Cyber Law",
+    "act": "IT Act"
   },
   {
-    "id": "004",
-    "section": "Section 12",
-    "topic": "Providing Registered Tenancy Agreement",
-    "obligation_of": "Landlord",
-    "limit": "Must provide one original signed and registered tenancy agreement to the tenant within 15 days of its registration with the Rent Authority.",
-    "penalty": null
+    "id": "LAW004",
+    "section": "Indian Contract",
+    "title": "Indian Contract Act, 1872",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1872-04-25",
+    "category": "Contract Law",
+    "act": "Contract Act"
   },
   {
-    "id": "005",
-    "section": "Section 13",
-    "topic": "Rent Payment and Receipt",
-    "obligation_of": "Tenant and Landlord",
-    "limit": "Tenant must pay rent within the period specified in the agreement. Landlord or property manager must provide a written receipt forthwith against acknowledgement. Bank acknowledgement is proof of electronic payment.",
-    "penalty": null
+    "id": "LAW005",
+    "section": "Companies",
+    "title": "Companies Act, 2013",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2013-08-29",
+    "category": "Corporate Law",
+    "act": "Companies Act"
+  },
+  {
+    "id": "LAW006",
+    "section": "Motor Vehicles",
+    "title": "Motor Vehicles Act, 1988",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1988-09-14",
+    "category": "Transport Law",
+    "act": "Motor Vehicles Act"
+  },
+  {
+    "id": "LAW007",
+    "section": "Environment Protection",
+    "title": "Environment Protection Act, 1986",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1986-11-19",
+    "category": "Environmental Law",
+    "act": "Environment Protection Act"
+  },
+  {
+    "id": "LAW008",
+    "section": "Copyright",
+    "title": "Copyright Act, 1957",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1957-06-04",
+    "category": "Intellectual Property",
+    "act": "Copyright Act"
+  },
+  {
+    "id": "LAW009",
+    "section": "Patents",
+    "title": "Patents Act, 1970",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1970-09-19",
+    "category": "Intellectual Property",
+    "act": "Patents Act"
+  },
+  {
+    "id": "LAW010",
+    "section": "Arbitration",
+    "title": "Arbitration and Conciliation Act, 1996",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1996-08-16",
+    "category": "Dispute Resolution",
+    "act": "Arbitration Act"
+  },
+  {
+    "id": "LAW011",
+    "section": "Negotiable Instruments",
+    "title": "Negotiable Instruments Act, 1881",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1881-12-09",
+    "category": "Commercial Law",
+    "act": "Negotiable Instruments Act"
+  },
+  {
+    "id": "LAW012",
+    "section": "Transfer of Property",
+    "title": "Transfer of Property Act, 1882",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1882-02-17",
+    "category": "Property Law",
+    "act": "Transfer of Property Act"
+  },
+  {
+    "id": "LAW013",
+    "section": "Specific Relief",
+    "title": "Specific Relief Act, 1963",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1963-12-13",
+    "category": "Civil Law",
+    "act": "Specific Relief Act"
+  },
+  {
+    "id": "LAW014",
+    "section": "Limitation",
+    "title": "Limitation Act, 1963",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1963-12-05",
+    "category": "Civil Law",
+    "act": "Limitation Act"
+  },
+  {
+    "id": "LAW015",
+    "section": "Legal Services",
+    "title": "Legal Services Authorities Act, 1987",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "1987-10-11",
+    "category": "Access to Justice",
+    "act": "Legal Services Authorities Act"
+  },
+  {
+    "id": "LAW016",
+    "section": "Domestic Violence",
+    "title": "Protection of Women from Domestic Violence Act, 2005",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2005-09-13",
+    "category": "Women and Child Protection",
+    "act": "Domestic Violence Act"
+  },
+  {
+    "id": "LAW017",
+    "section": "Juvenile Justice",
+    "title": "Juvenile Justice Act, 2015",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2015-12-31",
+    "category": "Child Protection",
+    "act": "Juvenile Justice Act"
+  },
+  {
+    "id": "LAW018",
+    "section": "Consumer Rights",
+    "title": "Consumer Protection Rules",
+    "source_url": "https://consumeraffairs.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2020-07-20",
+    "category": "Consumer Law",
+    "act": "Consumer Protection Rules"
+  },
+  {
+    "id": "LAW019",
+    "section": "Digital Personal Data",
+    "title": "Digital Personal Data Protection Act, 2023",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2023-08-11",
+    "category": "Data Protection",
+    "act": "DPDP Act"
+  },
+  {
+    "id": "LAW020",
+    "section": "Bharatiya Nyaya Sanhita",
+    "title": "Bharatiya Nyaya Sanhita, 2023",
+    "source_url": "https://www.indiacode.nic.in/",
+    "licence": "Government of India",
+    "published_on": "2023-12-25",
+    "category": "Criminal Law",
+    "act": "BNS"
   }
 ]
