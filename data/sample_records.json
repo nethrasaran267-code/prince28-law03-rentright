@@ -1,43 +1,223 @@
 
 [
   {
-    "id": "001",
-    "section": "Section 11",
-    "topic": "Security Deposit",
-    "obligation_of": "Landlord",
-    "limit": "Security deposit must not exceed three times the monthly rent, unless otherwise agreed. Refund must be made when the landlord takes possession of the vacant premises, after deducting tenant liabilities.",
-    "penalty": null
+    "id": "RNT001",
+    "title": "2BHK Apartment in Velachery",
+    "location": "Velachery, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "rent": 18000,
+    "furnished": true,
+    "available": true
   },
   {
-    "id": "002",
-    "section": "Section 17",
-    "topic": "Landlord Entry with Notice",
-    "obligation_of": "Landlord and Property Manager",
-    "limit": "At least 24 hours written notice. Notice must specify the reason, day and time. Entry must be between 7 AM and 8 PM.",
-    "penalty": null
+    "id": "RNT002",
+    "title": "1BHK Flat in Tambaram",
+    "location": "Tambaram, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "rent": 9000,
+    "furnished": false,
+    "available": true
   },
   {
-    "id": "003",
-    "section": "Section 16",
-    "topic": "Tenant Responsibilities",
-    "obligation_of": "Tenant",
-    "limit": "Must not intentionally or negligently damage the premises, must notify the landlord of damage as soon as possible, and must take reasonable care of the premises.",
-    "penalty": null
+    "id": "RNT003",
+    "title": "3BHK Independent House",
+    "location": "Anna Nagar, Chennai",
+    "property_type": "Independent House",
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "rent": 35000,
+    "furnished": true,
+    "available": true
   },
   {
-    "id": "004",
-    "section": "Section 12",
-    "topic": "Providing Registered Tenancy Agreement",
-    "obligation_of": "Landlord",
-    "limit": "Must provide one original signed and registered tenancy agreement to the tenant within 15 days of its registration with the Rent Authority.",
-    "penalty": null
+    "id": "RNT004",
+    "title": "Studio Apartment",
+    "location": "Guindy, Chennai",
+    "property_type": "Studio",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "rent": 12000,
+    "furnished": true,
+    "available": false
   },
   {
-    "id": "005",
-    "section": "Section 13",
-    "topic": "Rent Payment and Receipt",
-    "obligation_of": "Tenant and Landlord",
-    "limit": "Tenant must pay rent within the period specified in the agreement. Landlord or property manager must provide a written receipt forthwith against acknowledgement. Bank acknowledgement is proof of electronic payment.",
-    "penalty": null
+    "id": "RNT005",
+    "title": "2BHK Family Apartment",
+    "location": "Porur, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "rent": 16000,
+    "furnished": false,
+    "available": true
+  },
+  {
+    "id": "RNT006",
+    "title": "1BHK Compact Flat",
+    "location": "Medavakkam, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "rent": 8500,
+    "furnished": false,
+    "available": true
+  },
+  {
+    "id": "RNT007",
+    "title": "3BHK Luxury Apartment",
+    "location": "Adyar, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "rent": 42000,
+    "furnished": true,
+    "available": true
+  },
+  {
+    "id": "RNT008",
+    "title": "2BHK Semi-Furnished Flat",
+    "location": "Sholinganallur, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "rent": 20000,
+    "furnished": false,
+    "available": true
+  },
+  {
+    "id": "RNT009",
+    "title": "1BHK Apartment",
+    "location": "Perungudi, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "rent": 11000,
+    "furnished": true,
+    "available": false
+  },
+  {
+    "id": "RNT010",
+    "title": "4BHK Independent Villa",
+    "location": "ECR, Chennai",
+    "property_type": "Villa",
+    "bedrooms": 4,
+    "bathrooms": 4,
+    "rent": 65000,
+    "furnished": true,
+    "available": true
+  },
+  {
+    "id": "RNT011",
+    "title": "2BHK Apartment near IT Park",
+    "location": "Thoraipakkam, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "rent": 19000,
+    "furnished": true,
+    "available": true
+  },
+  {
+    "id": "RNT012",
+    "title": "1BHK Budget House",
+    "location": "Pallavaram, Chennai",
+    "property_type": "Independent House",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "rent": 7500,
+    "furnished": false,
+    "available": true
+  },
+  {
+    "id": "RNT013",
+    "title": "3BHK Spacious Apartment",
+    "location": "Nungambakkam, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "rent": 38000,
+    "furnished": true,
+    "available": false
+  },
+  {
+    "id": "RNT014",
+    "title": "2BHK Independent House",
+    "location": "Madipakkam, Chennai",
+    "property_type": "Independent House",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "rent": 14000,
+    "furnished": false,
+    "available": true
+  },
+  {
+    "id": "RNT015",
+    "title": "1BHK Furnished Apartment",
+    "location": "T Nagar, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "rent": 17000,
+    "furnished": true,
+    "available": true
+  },
+  {
+    "id": "RNT016",
+    "title": "3BHK Family Villa",
+    "location": "Kovilambakkam, Chennai",
+    "property_type": "Villa",
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "rent": 28000,
+    "furnished": false,
+    "available": true
+  },
+  {
+    "id": "RNT017",
+    "title": "2BHK Modern Flat",
+    "location": "OMR, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "rent": 22000,
+    "furnished": true,
+    "available": false
+  },
+  {
+    "id": "RNT018",
+    "title": "1BHK Independent House",
+    "location": "Chromepet, Chennai",
+    "property_type": "Independent House",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "rent": 8000,
+    "furnished": false,
+    "available": true
+  },
+  {
+    "id": "RNT019",
+    "title": "3BHK Premium Apartment",
+    "location": "Besant Nagar, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "rent": 45000,
+    "furnished": true,
+    "available": true
+  },
+  {
+    "id": "RNT020",
+    "title": "2BHK Affordable Apartment",
+    "location": "Poonamallee, Chennai",
+    "property_type": "Apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "rent": 13000,
+    "furnished": false,
+    "available": true
   }
 ]
