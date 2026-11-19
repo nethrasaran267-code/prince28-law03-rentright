@@ -56,3 +56,5 @@ PostgreSQL may switch to using a GIN when the table grows (becomes a large data 
 
 
 It is a method that stores mappings between individual values in complex data types and the rows containing them, allowing PostgreSQL to find matching records efficiently instead of scanning the entire table. This saves time and cost in case of laarge data sets (compared to Seq Scan).
+
+
