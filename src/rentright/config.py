@@ -24,7 +24,6 @@ class Settings(BaseSettings):
     # The commit this image was built from. CI sets it (Dockerfile ARG GIT_SHA); locally "dev".
     git_sha: str = "dev"
 
-
     @field_validator("database_url")
     @classmethod
     def _asyncpg(cls, value: str) -> str:

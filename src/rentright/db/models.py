@@ -67,7 +67,6 @@ class Document(Base):
     )
 
 
-
 class Page(Base):
     __tablename__ = "pages"
 

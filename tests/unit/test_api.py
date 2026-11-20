@@ -18,7 +18,6 @@ def test_git_sha_comes_from_the_environment(monkeypatch):
     assert settings.git_sha == "3f2c1ab"
 
 
-
 def test_ready_when_database_up(client):
     r = client.get("/ready")
     assert r.status_code == 200
