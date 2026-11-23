@@ -143,3 +143,42 @@ Two files or lines my coverage report says are never run, and whether they matte
 src/rentright/store.py – 0% coverage; investigate whether this module is used by the current application flow and add tests if needed.
 
 src/rentright/db/repository.py – initially 27% unit-only coverage; integration tests increased it to 89%. A few branches and lines remain untested.
+
+
+
+## D05 · CI/CD and going live
+
+- Live URL: https://rentright-r7vs.onrender.com
+- CI run for pull request 1: https://github.com/nethrasaran267-code/prince28-law03-rentright/actions/runs/44782167418
+- First deploy that ran by itself: https://github.com/nethrasaran267-code/prince28-law03-rentright/actions/runs/45112627771
+- Merge clicked at 09:49 AM → "Smoke test passed" at 09:50 AM → lead time: 01 min
+
+
+### Smoke test output from that CD run
+
+```text
+waiting: https://rentright-r7vs.onrender.com/health -> None
+waiting: https://rentright-r7vs.onrender.com/health -> 200 9e14611
+ok  /health -> 200, version 5780ef3c379917981f5f4402487ef8b13049f052
+ok  /ready -> 200 {'status': 'ready', 'checks': {'database': True}}
+ok  /v1/documents?limit=1 -> 200
+Smoke test passed
+```
+
+### Rollback drill
+
+- Rolled back to sha 40ba8fddcabe28976433ee29acb35f7a67256e3d : started 10:11 AM, smoke passed 10:13 AM (2 min)
+- Rolled forward to sha 5780ef3c379917981f5f4402487ef81b3049f052 : 5 min
+- During the rollback, the database stayed on the newer schema. Why is that safe here? 
+The CD workflow skips database migrations during manual rollback, so the database is not downgraded.
+This is safe when the newer schema is backward-compatible with the older application version, allowing it to continue working without requiring a schema downgrade.
+
+### Where my secrets live
+
+- Neon string: GitHub Secret DATABASE_URL + Render environment. Not in Git, not in the image.
+- Render deploy hook: GitHub Secret RENDER_DEPLOY_HOOK only.
+
+### Monitoring
+
+- UptimeRobot checks /health every 5 minutes; alerts go to my email.
+- One thing that would make my live app faster on its first request: (1 line)
