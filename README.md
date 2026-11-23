@@ -77,5 +77,8 @@ Stop with `Ctrl+C`, then `docker compose down`. Add `-v` to also delete the data
 | Coverage report | `make cov` | `uv run poe cov` |
 | Lint and format check | `make lint` | `uv run poe lint` |
 
+[![CI](https://github.com/YOUR-GITHUB-USERNAME/prince28-law03-rentright/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR-GITHUB-USERNAME/prince28-law03-rentright/actions/workflows/ci.yml)
+[![Live](https://img.shields.io/website?url=https%3A%2F%2Frentright-r7vs.onrender.com%2Fhealth&label=live)](https://rentright-r7vs.onrender.com/docs)
+[![Uptime (30 days)](https://img.shields.io/uptimerobot/ratio/YOUR-MONITOR-KEY)](https://rentright-r7vs.onrender.com/health)
 
-
+**Live:** https://rentright-r7vs.onrender.com · [API docs](https://rentright-r7vs.onrender.com/docs) · [health](https://rentright-r7vs.onrender.com/health)
