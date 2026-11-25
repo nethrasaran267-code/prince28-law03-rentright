@@ -308,3 +308,167 @@ I initially tried running SQL queries directly in PowerShell, which produced syn
 - D06 reports 266 pages in the collected corpus.
 - These figures have different recorded contexts and have not yet been reconciled.
 - The cumulative source manifest has 21 unique URLs, whereas the parser comparison covers 10 files.
+
+
+### D08 · LLM gateway
+
+**Model configuration**
+
+- Primary: `gemini-3.5-flash-lite` (Gemini)
+- Fallback: `openai/gpt-oss-20b` (Groq)
+
+**Connectivity test**
+
+Command: `uv run python scripts/llm_ping.py`
+
+- Gemini: OK — `gemini-3.5-flash-lite` responded with Pong in 1465 ms; tokens in = 7, out = 1.
+- Groq: OK — `openai/gpt-oss-20b` responded with pong in 753 ms; tokens in = 77, out = 45.
+
+**First question on my laptop**
+
+Question: "Does a tenancy agreement in Tamil Nadu have to be registered?"
+
+- First words after: 3.55 s
+- Total response time: 8.46 s
+- Tokens in: 183
+- Tokens out: 80
+- Cost: Rs 0.024216
+- Attempts: 1
+- Fallback: No
+
+**Repeated refund question**
+
+Question: "Explain in one sentence what a refund is."
+
+First request:
+- First words after: 5.11 s
+- Total response time: 7.99 s
+- Tokens in: 180
+- Tokens out: 28
+- Cost: Rs 0.011780
+- Attempts: 1
+- Fallback: No
+
+Second request:
+- First words after: 3.35 s
+- Total response time: 4.33 s
+- Tokens in: 180
+- Tokens out: 26
+- Cost: Rs 0.011305
+- Attempts: 1
+- Fallback: No
+
+Additional refund request:
+- First words after: 3.48 s
+- Total response time: 4.13 s
+- Tokens in: 180
+- Tokens out: 25
+- Cost: Rs 0.011067
+- Attempts: 1
+- Fallback: No
+
+Day 1 first-word latency target: under 1.5 s. The measured laptop responses have not met this target.
+
+**Live URL**
+
+- First words after: Not measured yet.
+- Second, awake request: Not measured yet.
+
+### Tokens: English against Tamil
+
+| Message | Tokens in |
+|---|---:|
+| "Hi" (mostly system prompt) | 172 |
+| English refund sentence | 180 |
+| Same sentence in Tamil | 188 |
+
+- English input: 180 tokens.
+- Tamil input: 188 tokens.
+- Tamil needs approximately 1.04 times the tokens of English (about 4.4% more).
+
+### What the model does without my documents
+
+**Question 6:** "Is my landlord allowed to raise the rent next month?"
+
+The model acknowledged that it could not determine the exact terms of my rental agreement because my specific documents were not connected.
+
+Exact words:
+
+"However, because I do not have your specific documents connected yet, I am not sure about the exact terms in your agreement."
+
+A detail to verify:
+- It stated that rent increases generally require proper notice and cannot be arbitrary during an ongoing fixed-term agreement unless agreed upon.
+- These legal claims still need verification against the applicable Tamil Nadu law and agreement.
+
+**Off-topic question:**
+
+Question: "Who won the 2011 cricket world cup?"
+
+Response:
+
+"That question is outside this product's subject."
+
+- Result: Successfully declined an unrelated question in one sentence.
+
+### Fallback and circuit breaker
+
+- Primary provider: Gemini.
+- Fallback provider: Groq (`openai/gpt-oss-20b`).
+- Gemini connectivity: Successful.
+- Groq connectivity: Successful.
+- Groq ping response time: 753 ms.
+- Usage endpoint reports 5 fallbacks and 4 errors.
+- Automatic fallback under an intentionally broken Gemini primary: Not yet verified.
+- Exact question number at which Gemini error logs stopped appearing: Not yet verified.
+
+### The bill
+
+Command: `Invoke-RestMethod "http://127.0.0.1:8000/v1/usage"`
+
+Usage date: 25 November 2026.
+
+- Total calls: 24
+- Errors: 4
+- Fallbacks: 5
+- Input tokens: 3,939
+- Output tokens: 3,675
+- Total cost: Rs 0.3903
+- Average cost per call: Rs 0.01626
+- Day 1 budget target: under Rs 0.50 per answered question.
+- Result: Within the cost target, based on the reported 24 calls. Exact average per successfully answered question is not yet established.
+
+### One thing that went wrong today, and how I fixed it
+
+**Problem:** Ruff reported 9 lint errors due to unsorted and unused imports in Python files.
+
+**Fix:**
+
+1. Ran `uv run ruff check . --fix`.
+   - All 9 errors fixed.
+2. Ran `uv run ruff format .`.
+   - 58 files left unchanged.
+3. Ran `uv run poe lint`.
+   - Ruff check passed.
+   - All 58 files were already formatted.
+
+**Additional verification:**
+
+- Created the `llm_calls` database migration using `uv run alembic revision --autogenerate -m "add llm_calls"`.
+- Successfully applied it using `uv run alembic upgrade head`.
+- Gateway unit tests: 19 passed.
+- Full unit tests: 78 passed, 1 warning.
+- Local FastAPI server started successfully using `uv run poe dev`.
+- Local `/v1/chat` requests returned HTTP 200.
+- Gemini success logs appeared with matching request IDs and completed request logs.
+
+### Fallback and circuit breaker
+
+- Primary: Gemini (`gemini-3.5-flash-lite`).
+- Fallback: Groq (`openai/gpt-oss-20b`).
+- Gemini intentionally broken: Yes.
+- Gemini error logged: Yes.
+- Automatic Groq fallback: Successful.
+- Groq success logged: Yes (`llm call groq ... ok`).
+- Request completed successfully: Yes.
+- Circuit breaker activation question number: Not yet recorded.
+- Gemini recovery after restoring the original key: Not yet verified.
