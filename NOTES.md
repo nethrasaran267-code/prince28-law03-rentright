@@ -246,3 +246,65 @@ Some source URLs were blocked or failed with HTTP 403. I used alternative availa
 - `sources.csv` contains 22 source entries, while the manifest contains 21 unique URL records.
 - The 2020 Gazette Rules Amendment has no corresponding manifest record.
 - An earlier filesystem inspection found 15 PDFs, while DATASET.md reports 10 files. These counts need reconciliation.
+
+## D07 · Parser comparison
+
+<!-- parsers:start -->
+| File | Parsers (A / B) | Pages | A found | B found | Time (A / B) | Better, why |
+|---|---|---|---|---|---|---|
+| 1960tn18-c8ca78f2.pdf | PyMuPDF / pypdf | 62 | 124,926 chars, 658 headings, 0 tables | 121,147 chars, 0 headings, 0 tables | 17.14 s / 2.15 s | |
+| tnreginet-gov-779857d0.html | trafilatura / strip tags | 1 | 654 chars, 4 headings, 0 tables | 21,400 chars, 0 headings, 0 tables | 0.16 s / 0.03 s | |
+| 79act-2019-c99673af.pdf | PyMuPDF / pypdf | 12 | 28,122 chars, 50 headings, 2 tables | 27,742 chars, 0 headings, 0 tables | 0.35 s / 0.26 s | |
+| extra-ordinary-lists-9a776d2e.html | trafilatura / strip tags | 1 | 280,322 chars, 0 headings, 1 tables | 268,567 chars, 0 headings, 0 tables | 0.44 s / 0.03 s | |
+| 413_Ex_IV_2.pdf | PyMuPDF / pypdf | 2 | 3,274 chars, 13 headings, 0 tables | 3,198 chars, 0 headings, 0 tables | 0.08 s / 0.03 s | |
+| 79-ex-iii-1a-c4b0cc5b.pdf | PyMuPDF / pypdf | 12 | 28,164 chars, 50 headings, 2 tables | 27,677 chars, 0 headings, 0 tables | 0.35 s / 0.20 s | |
+| tnrrrltact2017-5bbfc4bc.pdf | PyMuPDF / pypdf | 40 | 84,474 chars, 68 headings, 0 tables | 83,548 chars, 0 headings, 0 tables | 0.17 s / 0.17 s | |
+| 261-ex-iv-2-7d92cfbc.pdf | PyMuPDF / pypdf | 40 | 84,474 chars, 68 headings, 0 tables | 83,548 chars, 0 headings, 0 tables | 0.22 s / 0.11 s | |
+| 297_Ex_III_1a.pdf | PyMuPDF / pypdf | 1 | 1,857 chars, 15 headings, 0 tables | 1,789 chars, 0 headings, 0 tables | 0.06 s / 0.01 s | |
+| 311_Ex_IV_2.pdf | PyMuPDF / pypdf | 3 | 5,197 chars, 17 headings, 0 tables | 5,074 chars, 0 headings, 0 tables | 0.03 s / 0.03 s | |
+<!-- parsers:end -->
+
+### D07 · Parsing my corpus
+
+- Files processed in Run 1: **10**
+- Newly parsed: **9**
+- Already parsed: **1**
+- Retry output: **10 already parsed**
+- Pages reported in PostgreSQL by the initial parsing run: **134**
+- Parser failures: **Not explicitly reported in the available output**
+
+**Coverage clarification:** All 10 files in the parsing run were processed. The cumulative download manifest contains 21 unique URL records, of which 10 were downloaded. Therefore, 10/10 processing coverage applies to the 10-file parsing input, not necessarily the entire source manifest.
+
+### Failures by reason
+
+| Reason | Files | What I did |
+|---|---|---|
+| Confirmed parser failures | Not reported | No confirmed parser failure count is available. |
+| Previously failed files on retry | 0 newly retried | The retry output reported that all 10 files were already parsed. |
+
+- **The one I fixed:** No parser code fix has been confirmed. I identified and documented a PDF text-extraction issue.
+
+### What I saw when I read my parsed pages
+
+- A page where the heading path is right: Tamil Nadu Government Gazette, page 12, `["EXTRAORDINARY", "TAMIL NADU GOVERNMENT GAZETTE EXTRAORDINARY", "DETAILS OF APPEAL:"]`.
+- Something that came out wrong: HOUSING AND URBAN DEVELOPMENT DEPARTMENT, pages 8 and 11. Examples include `fi led` instead of `filed` and `eff ected` instead of `effected`.
+- A table: PyMuPDF detected 2 tables in `79act-2019-c99673af.pdf`, while pypdf detected 0. The extracted table structure and Markdown grid quality have not yet been visually verified.
+
+### My parser choice
+
+- For PDFs, I chose **PyMuPDF** because it detected headings and tables that pypdf did not detect in the comparison.
+- For example, in `79act-2019-c99673af.pdf`, PyMuPDF detected 50 headings and 2 tables, while pypdf detected 0 headings and 0 tables.
+- However, PyMuPDF was slower on the 62-page PDF: 17.14 seconds compared with 2.15 seconds for pypdf.
+- A kind of document that may need additional processing: scanned PDFs without a usable text layer may require OCR.
+
+### One thing that went wrong today, and how I fixed it
+
+I initially tried running SQL queries directly in PowerShell, which produced syntax errors because PowerShell does not execute SQL. I corrected this by opening the correct RentRight Neon project and running the queries in the Neon SQL Editor.
+
+### Known discrepancies requiring verification
+
+- The initial parsing run reported 134 pages in PostgreSQL.
+- The parser comparison table contains 174 pages when its individual page counts are added.
+- D06 reports 266 pages in the collected corpus.
+- These figures have different recorded contexts and have not yet been reconciled.
+- The cumulative source manifest has 21 unique URLs, whereas the parser comparison covers 10 files.
