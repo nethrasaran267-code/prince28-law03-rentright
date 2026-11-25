@@ -1,8 +1,5 @@
 import pytest
-from fastapi.testclient import TestClient
 
-from rentright.api.deps import check_db, get_repo
-from rentright.api.main import create_app
 from rentright.config import Settings
 
 # Tiny fake records: unit tests never touch a real database or your data file.
@@ -43,10 +40,10 @@ def db_state():
     return {"up": True}
 
 
-@pytest.fixture
-def client(settings, db_state):
-    app = create_app(settings)
-    app.dependency_overrides[get_repo] = lambda: FakeRepo(SAMPLE)
-    app.dependency_overrides[check_db] = lambda: db_state["up"]
-    with TestClient(app) as c:
-        yield c
+# @pytest.fixture
+# def client(settings, db_state):
+#     app = create_app(settings)
+#     app.dependency_overrides[get_repo] = lambda: FakeRepo(SAMPLE)
+#     app.dependency_overrides[check_db] = lambda: db_state["up"]
+#     with TestClient(app) as c:
+#         yield c
