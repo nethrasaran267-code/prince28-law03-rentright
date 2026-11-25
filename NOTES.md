@@ -67,7 +67,7 @@ It is a method that stores mappings between individual values in complex data ty
 docker images rentright:dev
 Output:
 IMAGE           ID             DISK USAGE   CONTENT SIZE   EXTRA
-rentright:dev   f7de2d45c2cc        300MB           70MB 
+rentright:dev   f7de2d45c2cc        300MB           70MB
 
 docker run --rm rentright:dev id
 Output:
@@ -86,7 +86,7 @@ Output:
 NAME                  IMAGE                    COMMAND                  SERVICE   CREATED              STATUS                        PORTS
 rentright-api-1       rentright-api            "sh -c 'exec uvicorn…"   api       About a minute ago   Up 52 seconds (healthy)       0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
 rentright-db-1        pgvector/pgvector:pg17   "docker-entrypoint.s…"   db        About a minute ago   Up About a minute (healthy)   0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
-rentright-migrate-1   rentright-migrate        "sh -c 'alembic upgr…"   migrate   About a minute ago   Exited (0) 52 seconds ago     
+rentright-migrate-1   rentright-migrate        "sh -c 'alembic upgr…"   migrate   About a minute ago   Exited (0) 52 seconds ago
 rentright-redis-1     redis:7-alpine           "docker-entrypoint.s…"   redis     About a minute ago   Up About a minute (healthy)   0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
 
 Explanation:
@@ -106,14 +106,14 @@ migrate-1  | records=20 inserted=20 updated=0 unchanged=0
 
 Output (DOWN+UP): <docker compose down>
 ✔ Container rentright-api-1     Removed
-✔ Container rentright-migrate-1 Removed  
+✔ Container rentright-migrate-1 Removed
 ✔ Container rentright-redis-1   Removed
-✔ Container rentright-db-1      Removed 
+✔ Container rentright-db-1      Removed
 ✔ Network rentright_default     Removed
 <docker compose up -d>
 ✔ Container rentright-redis-1   Healthy
 ✔ Container rentright-db-1      Healthy
-✔ Container rentright-migrate-1 Exited 
+✔ Container rentright-migrate-1 Exited
 ✔ Container rentright-api-1     Started
 Explanation:
 The Docker successfully removed and recreated all containers and the network while preserving named-volume data. PostgreSQL and Redis became healthy, migrations completed successfully, and the FastAPI container started.
@@ -133,7 +133,7 @@ The load balancer should stop routing traffic because the application cannot acc
 ### Tests and coverage
 
 ```text
-uv run poe test              → 16 passed 
+uv run poe test              → 16 passed
 uv run poe test-integration  → 7 passed
 coverage TOTAL, unit only    → 73%
 coverage TOTAL, with integration tests → 84%
@@ -169,7 +169,7 @@ Smoke test passed
 
 - Rolled back to sha 40ba8fddcabe28976433ee29acb35f7a67256e3d : started 10:11 AM, smoke passed 10:13 AM (2 min)
 - Rolled forward to sha 5780ef3c379917981f5f4402487ef81b3049f052 : 5 min
-- During the rollback, the database stayed on the newer schema. Why is that safe here? 
+- During the rollback, the database stayed on the newer schema. Why is that safe here?
 The CD workflow skips database migrations during manual rollback, so the database is not downgraded.
 This is safe when the newer schema is backward-compatible with the older application version, allowing it to continue working without requiring a schema downgrade.
 
@@ -181,4 +181,68 @@ This is safe when the newer schema is backward-compatible with the older applica
 ### Monitoring
 
 - UptimeRobot checks /health every 5 minutes; alerts go to my email.
-- One thing that would make my live app faster on its first request: (1 line)
+- One thing that would make my live app faster on its first request: Preload frequently used data and initialize models during application startup instead of loading them on the first user request.
+
+## D06 · Collecting the corpus
+
+- **Start target:** TN Act + Rules + Model Tenancy Act.
+- **Collected today (DATASET.md):** 10 files, 266 pages, 7.0 MB.
+- **Doors used:** HTTP downloads and existing local files.
+
+### Licence check
+
+| Source | Licence or terms, in my words | May I show full text in answers? |
+|---|---|---|
+| PRS India | PRS-hosted legal text; verify against official Gazette | Not confirmed |
+| Tamil Nadu Gazette | Government Gazette; verify reuse terms | Not confirmed |
+| Tamil Nadu Housing Board | Public legal text; verify reuse terms | Not confirmed |
+| TN Registration | Government publication; verify reuse terms | Not confirmed |
+| MoHUA | Government-hosted Model Tenancy Act; reuse terms need verification | Not confirmed |
+
+### robots.txt
+
+The downloader checks robots.txt before requesting source documents. Three URLs are recorded as blocked by robots.txt in the cumulative manifest. Unreachable robots.txt files are treated as disallowed.
+
+### Download results
+
+**Cumulative manifest (21 unique URLs):**
+- Downloaded: 10
+- Blocked: 3
+- Failed: 8
+
+**Earlier Run 1 (23 November):**
+- Sources: 10
+- Downloaded: 0
+- Skipped: 0
+- Blocked: 2
+- Failed: 8
+- Duration: 4.3 seconds
+
+**Later runs:**
+- A subsequent run was interrupted using Ctrl+C.
+- Exact interruption count is not recoverable from the cumulative manifest.
+- Run 2 and Run 3 individual summaries remain unverified.
+
+### Capacity
+
+- Current measured corpus: 10 files, 266 pages, 7.0 MB.
+- Full corpus target: 1,000+ pages.
+- Estimated full-corpus tokens: 0.65 million.
+- Estimated embedding cost: $0.11 (approximately ₹11).
+- Estimated vector storage: 6 MB.
+- Estimated text storage: 3 MB.
+- Estimated combined storage: 9 MB.
+
+### What surprised you
+
+The downloader could collect documents from multiple sources, but some government websites blocked access through HTTP 403 or robots.txt. Existing local files also helped complete the corpus.
+
+### What went wrong and how you fixed it
+
+Some source URLs were blocked or failed with HTTP 403. I used alternative available sources, including Tamil Nadu Gazette and Housing Board documents. Run 1 was also interrupted with Ctrl+C, so I used the cumulative manifest instead of guessing its interruption count.
+
+### Known discrepancies
+
+- `sources.csv` contains 22 source entries, while the manifest contains 21 unique URL records.
+- The 2020 Gazette Rules Amendment has no corresponding manifest record.
+- An earlier filesystem inspection found 15 PDFs, while DATASET.md reports 10 files. These counts need reconciliation.
