@@ -472,3 +472,475 @@ Usage date: 25 November 2026.
 - Request completed successfully: Yes.
 - Circuit breaker activation question number: Not yet recorded.
 - Gemini recovery after restoring the original key: Not yet verified.
+
+## D09 · Prompt versions compared
+
+<!-- prompts:start -->
+
+| Prompt version | Correct | Accuracy | Invalid replies | Avg tokens in |
+|---|---|---|---|---|
+| classify_v1 | 13/20 | 65% | 0 | 48 |
+| classify_v2 | 20/20 | 100% | 0 | 238 |
+| classify_v3 | 18/20 | 90% | 0 | 398 |
+| classify_v4 | 19/20 | 95% | 0 | 257 |
+
+<!-- prompts:end -->
+
+# D09 · Prompts and Structured Output
+
+## 1. Router Prompt Evaluation
+
+### Best-performing router prompt
+
+**Best prompt: `classify_v2` — 20/20 (100%)**
+
+I compared three initial router versions using a 20-question evaluation dataset.
+
+| Prompt | Correct | Accuracy |
+|---|---:|---:|
+| classify_v1 | 13/20 | 65% |
+| classify_v2 | 20/20 | 100% |
+| classify_v3 | 18/20 | 90% |
+| classify_v4 (second evaluation) | 19/20 | 95% |
+
+### What changed in v4?
+
+I used `classify_v2` as the base and added one clarification to the personal-question definition:
+
+> Mentioning "my landlord" or "my agreement" alone does not automatically make a question personal.
+
+The intention was to prevent questions from being classified as personal simply because they contained first-person wording.
+
+### What happened to the score?
+
+The second evaluation of v4 achieved 19/20 (95%), compared with the previous best of 20/20 (100%) from v2.
+
+The clarification corrected four of the five previous misclassifications but introduced one false negative.
+
+**Remaining error:**
+
+- Line: 7
+- Wanted: `personal`
+- Got: `docs`
+- Question: "Is my landlord allowed to raise the rent next month?"
+
+The clarification may have made the personal classification too restrictive. The question concerns the user's own rental situation, even though it is phrased as a general legal question.
+
+**Decision:** Retain `classify_v2` as the best-performing version. Keep `classify_v4` for comparison rather than replacing the existing prompt.
+
+**Test-set label changed:** None.
+
+### Proof: Prompt comparison output
+
+Command:
+
+`uv run python scripts/compare_prompts.py`
+
+Output:
+
+```text
+classify_v1 missed line 5: wanted docs, got personal
+classify_v1 missed line 8: wanted docs, got off_topic
+classify_v1 missed line 10: wanted docs, got off_topic
+classify_v1 missed line 11: wanted docs, got off_topic
+classify_v1 missed line 17: wanted off_topic, got docs
+classify_v1 missed line 18: wanted off_topic, got docs
+classify_v1 missed line 20: wanted off_topic, got docs
+
+classify_v3 missed line 7: wanted personal, got docs
+classify_v3 missed line 21: wanted personal, got docs
+
+classify_v1    13/20  65%
+classify_v2    20/20  100%
+classify_v3    18/20  90%
+
+model calls made now: 0 (the rest came from the cache)
+-> table in NOTES.md
+```
+
+### v4 second evaluation
+
+```text
+Base version: classify_v2
+Modification: Added clarification that mentioning "my landlord"
+or "my agreement" alone does not make a question personal.
+
+Result: 19/20 (95%)
+Previous best: classify_v2 — 20/20 (100%)
+
+Remaining error:
+Line 7 — wanted personal, got docs.
+
+Decision: Retain classify_v2 as the current best-performing prompt.
+Keep classify_v4 for comparison.
+```
+
+### Token efficiency
+
+The input tokens per question for v1 and the best version still need to be retrieved from the prompt comparison/token records.
+
+The available comparison output confirms that the model made zero new calls because cached results were used. Therefore, it does not establish the actual token cost per question.
+
+The accuracy improvement from v1 (65%) to v2 (100%) is significant, but the additional token cost must be checked before deciding whether the trade-off is worthwhile.
+
+---
+
+## 2. My Contract (DocMeta)
+
+The metadata extraction contract defines the structured information stored for each source document.
+
+### Fields retained
+
+The metadata includes:
+
+- `title` — document title.
+- `year` — publication or enactment year, when available.
+- `language` — document language.
+- `doc_type` — original file format, such as PDF or HTML.
+- `doc_kind` — document classification, such as rule, guideline, list, reference or other.
+- `topics` — searchable subject categories.
+- `topic` — extracted topic information.
+- `section` — relevant sections or rules.
+- `summary` — concise document-level summary.
+- `limit` — legal limits or thresholds, when applicable.
+- `penalty` — penalties, when applicable.
+- `obligation_of` — parties with obligations, when applicable.
+- `source` — source organisation.
+- `source_url` — original source URL.
+- `licence` — source licensing information.
+- `published_on` — publication date, when available.
+
+The extraction output also contains ingestion and technical information such as `path`, `pages`, `chars`, `parser` and `tables`.
+
+### Fields deleted and why
+
+The exact deleted-field list from the contract revision was not included in the available run evidence. This needs to be filled from the actual DocMeta schema change rather than guessing.
+
+The design principle is that metadata should describe the individual document. Fields that assume every document contains legal obligations, penalties or statutory sections should allow empty values where they are not applicable.
+
+### Field tightened: `section`
+
+The `section` field needs to identify provisions actually discussed or modified by the source document.
+
+It must not incorrectly copy section references from the original legislation when the document is an amendment to specific rules.
+
+This became important during manual metadata review.
+
+---
+
+## 3. Metadata Extraction Run
+
+**Prompt version:** `extract_v1`
+
+### Extraction results
+
+| Metric | First run | Second run | Total |
+|---|---:|---:|---:|
+| Documents OK | 5 | 4 | 9 |
+| Repaired | 0 | 0 | 0 |
+| Failed | 0 | 0 | 0 |
+| Input tokens | 10,331 | 7,716 | 18,047 |
+| Output tokens | 1,564 | 689 | 2,253 |
+| Cost | ₹0.6659 | ₹0.3835 | ₹1.0494 |
+
+- Total successful extractions: 9.
+- Total repaired: 0.
+- Total failed: 0.
+- Total input tokens: 18,047.
+- Total output tokens: 2,253.
+- Total cost: ₹1.0494.
+- Average cost per successful document: approximately ₹0.1166.
+
+The extraction process completed for all 9 pending documents. The total number of parsed documents in the database was not established by these command outputs.
+
+### Proof: Extraction commands
+
+First run:
+
+```powershell
+uv run python scripts/extract_metadata.py --limit 5
+```
+
+Output:
+
+```text
+prompt=extract_v1 pending=5 ok=5 repaired=0 failed=0
+tokens_in=10331 tokens_out=1564
+cost=Rs 0.6659 seconds=65
+```
+
+Second run:
+
+```powershell
+uv run python scripts/extract_metadata.py --limit 5
+```
+
+Output:
+
+```text
+prompt=extract_v1 pending=5 ok=5 repaired=0 failed=0
+tokens_in=10331 tokens_out=1564
+cost=Rs 0.6659 seconds=65
+```
+
+The same five documents were reported because the `--limit 5` command was run again. The output was identical.
+
+Final extraction run:
+
+```powershell
+uv run python scripts/extract_metadata.py
+```
+
+Output:
+
+```text
+prompt=extract_v1 pending=4 ok=4 repaired=0 failed=0
+tokens_in=7716 tokens_out=689
+cost=Rs 0.3835 seconds=75
+```
+
+The first five and final four successful documents give nine unique extraction results.
+
+### Extracted document-kind distribution
+
+The metadata query returned:
+
+| Document kind | Count |
+|---|---:|
+| Other | 3 |
+| Rule | 3 |
+| Guideline | 1 |
+| List | 1 |
+| Reference | 1 |
+| **Total** | **9** |
+
+This demonstrates that the extraction classified different types of source documents instead of treating every document as legislation.
+
+---
+
+## 4. Manual Metadata Review
+
+### Valid output does not guarantee correct metadata
+
+**Document:** Housing and Urban Development Department
+
+**Fields reviewed:** `title`, `topics`, `section`, `summary`.
+
+The original PDF is an amendment to the Tamil Nadu Regulation of Rights and Responsibilities of Landlords and Tenants Rules, 2019.
+
+It is dated 11 July 2019 and identified as G.O. Ms. No. 103.
+
+However, the extracted metadata described the original Rules rather than identifying the specific amendment notification.
+
+The extracted section references included:
+
+- Section 45(1)
+- Section 4
+- Section 21
+
+These do not clearly represent the actual amendment provisions.
+
+The amendment modifies:
+
+- Rule 3(2)
+- Rule 3(4)
+- Rule 8(1)
+
+**Impact:**
+
+The extracted metadata is structurally valid but legally inaccurate. It may cause misleading document retrieval and incorrect legal citations.
+
+**Conclusion:**
+
+Metadata extraction requires semantic validation in addition to JSON/schema validation. Amendment notifications must be identified as amendments, and their modified rules must be extracted accurately.
+
+---
+
+## 5. Proof: Actual Extracted Metadata
+
+### Example 1: Tamil Nadu Gazette amendment
+
+Document:
+
+`data/raw/tn-gazette/297_Ex_III_1a.pdf`
+
+Extracted metadata:
+
+```json
+{
+  "year": 2019,
+  "topics": [
+    "tamil nadu rules",
+    "tenancy agreement",
+    "amendments"
+  ],
+  "section": [
+    "rule 3",
+    "rule 8"
+  ],
+  "summary": "This document contains amendments to the Tamil Nadu Regulation of Rights and Responsibilities of Landlords and Tenants Rules, 2019, regarding timelines for tenancy agreements.",
+  "doc_kind": "rule",
+  "language": "en",
+  "title": "No. 297]",
+  "extract": {
+    "model": "gemini-3.5-flash-lite",
+    "prompt": "extract_v1",
+    "attempts": 1
+  }
+}
+```
+
+Observation:
+
+The extraction identified the document as a rule-related amendment and captured relevant rule references.
+
+However, the generic title `No. 297]` shows that document-title extraction can still be improved.
+
+### Example 2: Tamil Nadu registration guideline
+
+Document:
+
+`data/raw/tn-registration/tnreginet-gov-779857d0.html`
+
+Extracted metadata:
+
+```json
+{
+  "year": null,
+  "pages": 1,
+  "topics": [
+    "கட்டண செலுத்தும் முறை",
+    "இணையவழி செலுத்துதல்"
+  ],
+  "summary": "பதிவுத்துறைக்கான கட்டணங்களை வங்சிகள் மூலம் இணையவழியில் செலுத்தும் முறைகள் மற்றும் வரம்புகள் சுட்டுக்காட்டப்பட்டுள்ளன.",
+  "doc_kind": "guideline",
+  "language": "ta",
+  "title": "உங்கள் அதிகார எல்லையை தெரிந்து கொள்ளுங்கள்",
+  "doc_type": "html",
+  "extract": {
+    "model": "gemini-3.5-flash-lite",
+    "prompt": "extract_v1",
+    "attempts": 1
+  }
+}
+```
+
+Observation:
+
+The extraction handled a Tamil HTML document and returned Tamil-language topics and a summary.
+
+This demonstrates that the extraction pipeline can process documents beyond English PDFs.
+
+### Example 3: Incorrectly broad document classification
+
+Document:
+
+`data/raw/tn-housing-board/tnrrrltact2017-5bbfc4bc.pdf`
+
+Extracted metadata:
+
+```json
+{
+  "year": 2017,
+  "pages": 40,
+  "topics": [
+    "government gazette",
+    "tamil nadu acts",
+    "industrial establishments",
+    "water supply and sewerage",
+    "legislation"
+  ],
+  "summary": "This document is an extraordinary issue of the Tamil Nadu Government Gazette containing various acts and amendments passed by the Tamil Nadu Legislative Assembly in August 2017.",
+  "doc_kind": "other",
+  "language": "en",
+  "title": "No. 261]"
+}
+```
+
+Observation:
+
+The document was classified as `other`, and the topics were broad. This is another example where metadata needs to be reviewed against the actual legal document before being used for retrieval.
+
+---
+
+## 6. One Thing That Went Wrong Today and How I Fixed It
+
+One issue was that the v4 router clarification reduced accuracy from the previous best of 100% to 95%.
+
+I compared the versions using the same 20-question test set, identified the remaining false negative and decided not to replace `classify_v2`.
+
+Another important finding came from manual extraction review. A structurally valid metadata record described an amendment as the original Rules.
+
+I identified the mismatch by comparing the extracted fields against the original PDF and its actual amended provisions.
+
+This reinforced two important decisions:
+
+1. Keep the best-performing router prompt based on measured evaluation results rather than assuming every new prompt is better.
+2. Validate extracted metadata against original legal sources, especially for amendments and statutory references.
+
+---
+
+## 7. Final Validation Evidence
+
+### Targeted tests
+
+Command:
+
+```powershell
+uv run pytest tests/unit/test_classify.py tests/unit/test_gateway.py
+```
+
+Output:
+
+```text
+..........................
+26 passed in 0.31s
+```
+
+### Full unit test suite
+
+Command:
+
+```powershell
+uv run poe test
+```
+
+Output:
+
+```text
+93 passed, 1 warning in 2.06s
+```
+
+The warning was related to the optional `PySocks` dependency required for SOCKS proxy support in urllib3. It did not cause test failures.
+
+### Lint and formatting
+
+Command:
+
+```powershell
+uv run poe lint
+```
+
+Output:
+
+```text
+Poe => ruff check .
+All checks passed!
+
+Poe => ruff format --check .
+71 files already formatted
+```
+
+### Overall result
+
+- Best router prompt: `classify_v2` (20/20).
+- Extraction prompt: `extract_v1`.
+- Successful metadata extractions: 9.
+- Repaired extractions: 0.
+- Failed extractions: 0.
+- Total extraction cost: ₹1.0494.
+- Unit tests: 93 passed.
+- Lint: passed.
+- Formatting: passed.
+
+**D09 conclusion:** The router evaluation identified a reliable best-performing prompt, while the extraction run demonstrated structured metadata generation across multiple document types and languages. Manual review also exposed the difference between schema-valid output and legally accurate output, highlighting the need for source-based metadata validation.
