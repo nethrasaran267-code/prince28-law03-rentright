@@ -944,3 +944,81 @@ Poe => ruff format --check .
 - Formatting: passed.
 
 **D09 conclusion:** The router evaluation identified a reliable best-performing prompt, while the extraction run demonstrated structured metadata generation across multiple document types and languages. Manual review also exposed the difference between schema-valid output and legally accurate output, highlighting the need for source-based metadata validation.
+
+
+## D10 · Queue and worker
+
+### First run: ten documents
+
+- First run: **9 documents queued**, finished in **75 seconds**.
+- Done: **9**, skipped: **0**, failed: **0**.
+- Pages processed: **134**.
+- Pace: **8.33 seconds per document** (75 / 9).
+- INGEST_RPM: **Not recorded**.
+- INGEST_CONCURRENCY: **Not recorded**.
+
+The command requested 10 documents, but only 9 were eligible for ingestion. All 9 completed successfully.
+
+### Asynchronous processing verification
+
+- The ingestion API immediately returned HTTP **202 Accepted** with a job ID.
+- Actual processing happened asynchronously in the separate worker terminal.
+- Redis successfully connected, and the worker started with 1 registered function: `ingest_document`.
+- Gemini 3.5 Flash Lite metadata extraction calls succeeded.
+- Opened the job status endpoint in the browser:
+
+  `/v1/ingest/d2f8ad8e6dfd4a90aed5329cfe26d078`
+
+- Browser polling returned HTTP **200** responses.
+- The job eventually reached `finished` with 9 completed documents and 134 pages.
+
+### Idempotency verification
+
+- Ran `uv run python scripts/ingest.py --limit 10` again.
+- Output: `Nothing to do: all of it is ingested.`
+- This confirms that already-ingested documents were not queued for duplicate processing.
+- The next-ten selection behaviour was not demonstrated because no additional eligible documents remained.
+
+### Kill test
+
+- Status: **Not performed yet**.
+- Reason: The current corpus contains only 10 documents, which is insufficient for the required 20-job kill test.
+- Queued: N/A.
+- At the time of kill: N/A.
+- After worker restart: N/A.
+- Documents in the database: 10 ingested in the first run.
+- Different document IDs: Not independently verified.
+- Recovery time: Not measured.
+- Why nothing was doubled: The ingestion pipeline checks existing ingestion state before processing, preventing completed documents from being submitted for duplicate processing. Worker recovery after interruption still needs to be verified.
+
+### Dead-letter list
+
+| Stage (parse / extract / download / gave up) | Items | What I did |
+|---|---:|---|
+| Parse | 0 confirmed | No parse failures reported in the ingestion report |
+| Extract | 0 confirmed | Gemini extraction calls succeeded |
+| Download | 0 confirmed | No download failures reported during this ingestion run |
+| Gave up | 0 | Ingestion report confirmed `dead_letter=0` |
+
+### Live ingestion
+
+- RentRight on Render: **Not tested yet**.
+- Documents completed out of 5: N/A.
+- Failed: N/A.
+- Failure reasons: N/A.
+- A request without the admin token gets HTTP status: **Not tested yet**.
+
+### Week 2 against Monday's estimate
+
+- Monday's `docs/CAPACITY.md` estimate: **1,000+ pages**, approximately **650,000 tokens** for the full target corpus.
+- Today's `docs/INGEST_REPORT.md`: **134 pages**, token count not reported.
+- Difference: Today's 134 pages represent the measured pages ingested into Postgres, whereas Monday's 1,000+ pages and 650,000 tokens were estimates for the full target corpus.
+- The token difference cannot be calculated until the actual token count is recorded.
+
+### One thing that went wrong today, and how I fixed it
+
+The ingestion command requested 10 documents but queued only 9. All 9 were processed successfully in 75 seconds. Running the command again returned `Nothing to do: all of it is ingested.`
+
+This confirmed that completed documents were not processed again. The ingestion report also confirmed 134 pages and zero dead-letter items.
+
+**Outcome:** The initial asynchronous ingestion, worker execution, job-status polling, and idempotency behaviour were verified successfully. Worker recovery, 20-job kill testing, next-ten selection, and live Render ingestion remain pending.

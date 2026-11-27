@@ -30,14 +30,19 @@ class FakeRepo:
 
 
 @pytest.fixture
-def settings():
-    # _env_file=None: ignore your local .env so tests behave the same everywhere
-    return Settings(app_env="ci", database_url="postgresql://localhost:5432/unused", _env_file=None)
+def db_state():
+    return {"up": True}
 
 
 @pytest.fixture
-def db_state():
-    return {"up": True}
+def settings():
+    # _env_file=None: ignore your local .env so tests behave the same everywhere
+    return Settings(
+        app_env="ci",
+        database_url="postgresql://localhost:5432/unused",
+        admin_token="test-token",  # pragma: allowlist secret
+        _env_file=None,
+    )
 
 
 # @pytest.fixture
